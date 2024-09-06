@@ -28,6 +28,21 @@ def get_users():
     
     return {"data": data}
 
+@user.get("/{id}")
+def get_user(id: int):
+    result = conn.execute(users.select().where(users.c.id == id)).first()
+    
+    if result:
+        user = {
+            "id": result[0],
+            "name": result[1],
+            "email": result[2],
+            "password": result[3]
+        }
+        return {"data": user}
+    else:
+        return {"error": "User not found"}
+
 @user.post("/")
 def create_user(user: User):
     new_user = {
